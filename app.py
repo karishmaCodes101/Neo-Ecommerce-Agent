@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 
 import streamlit as st
@@ -11,7 +12,16 @@ from agent.graph import compiled_graph
 
 load_dotenv()
 
-st.set_page_config(page_title="Ecom Price Agent", page_icon="🛒", layout="wide")
+# Configure logging so DDG/SerpAPI request logs from agent/nodes/*.py show up
+# in your terminal (Streamlit runs your script in a normal Python process --
+# these logs print wherever you launched `streamlit run app.py` from, not in
+# the browser). Set LOG_LEVEL=DEBUG in .env for more verbose output.
+logging.basicConfig(
+    level=os.getenv("LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+
+st.set_page_config(page_title="NEO - Ecom Price Agent", page_icon="🛒", layout="wide")
 
 # --- Sidebar: LLM provider selection -----------------------------------
 st.sidebar.header("Settings")
@@ -45,7 +55,7 @@ st.sidebar.caption(
 )
 
 # --- Main UI --------------------------------------------------------------
-st.title("🛒 Neo : Ecom Price Agent")
+st.title("🛒 NEO - Ecom Price Agent")
 st.write(
     "Ask for a product and I'll compare mock listings across Amazon, Flipkart, "
     "Myntra, and Ajio, then recommend the best value."
